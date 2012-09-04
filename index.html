@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Terrarium by PolicyStat</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Terrarium</h1>
+        <p>Package and ship relocatable python virtualenvs, like a boss.</p>
+
+        <p class="view"><a href="https://github.com/PolicyStat/terrarium">View the Project on GitHub <small>PolicyStat/terrarium</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/PolicyStat/terrarium/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/PolicyStat/terrarium/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/PolicyStat/terrarium">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Terrarium</h1>
+
+<p><a href="http://travis-ci.org/PolicyStat/terrarium"><img src="https://secure.travis-ci.org/PolicyStat/terrarium.png" alt="Build Status"></a></p>
+
+<p>Package and ship relocatable python virtual environments, like a boss.</p>
+
+<p>Terrarium will package up and compress a virtualenv for you based on pip
+requirements and then let you ship that environment around.  Do the
+complex dependency math one time and then every subsequent install is
+basically at the speed of file transfer + decompression.</p>
+
+<h2>The Problem Terrarium Solves</h2>
+
+<p>Pip and virtualenv are awesome, but pip is not designed to allow
+consistent and reproducable updates of existing environments.  Pip is
+also a general installation tool, meaning that it's not near as fast as
+shipping around compressed source code.  This means that even if you
+have well-made requirements files, your pip-based deploys are either
+slow or inconsistent.</p>
+
+<h2>Installation</h2>
+
+<p>Install using pip:</p>
+
+<pre><code>pip install terrarium
+</code></pre>
+
+<h2>Basic Usage</h2>
+
+<pre><code>terrarium [options] COMMAND [requirements files...]
+</code></pre>
+
+<p>Creating a new environment:</p>
+
+<pre><code>terrarium --target testenv install requirements.txt more_requirements.txt
+</code></pre>
+
+<p>After this command finishes, <code>testenv</code> will be configured with all of
+the requirements specified in <code>requirements.txt</code> and
+<code>more_requirements.txt</code>.</p>
+
+<p>Additionally, terrarium creates a script in <code>testenv/bin/terrarium_bootstrap.py</code> that can be used to generate a fresh environment using exactly the same requirements. This behavior can be disabled by using the <code>--no-bootstrap</code> option.</p>
+
+<p>If <code>testenv</code> is an already existing environment, it will replace it with a fresh environment, and preserve the old environment as <code>testenv.bak</code>.</p>
+
+<pre><code>source testenv/bin/activate
+terrarium install test_requirements.txt
+</code></pre>
+
+<p>When a virtualenv is already activated, the --target option defaults to
+the activated environment. Terrarium will replace the activated
+environment (<code>testenv</code>) with a fresh environment defined by <code>test_requirements.txt</code>.
+The old environment is preserved at <code>testenv.bak</code>.</p>
+
+<h2>Terrarium archives</h2>
+
+<pre><code>terrarium --target testenv --storage-dir /mnt/storage install requirements.txt more_requirements.txt
+</code></pre>
+
+<p>After building a fresh environment, terrarium will archive and compress
+the environment, and then copy it to the location specified by
+<code>storage-dir</code>.</p>
+
+<p>Subsequent installs for the same requirement set that specify the same
+<code>storage-dir</code>, terrarium will copy and extract the compressed archive
+from <code>/mnt/storage</code>.</p>
+
+<p>To display exactly how terrarium will name the archive, you can run the
+following command:</p>
+
+<pre><code>terrarium key requirements.txt more_requirements.txt
+x86_64-2.6-c33a239222ddb1f47fcff08f3ea1b5e1
+</code></pre>
+
+<p>By default the key includes the system architecture, python version and
+the MD5 digest of the sorted contents of the requirements files. The
+digest used can be customized with <code>--digest-type</code>, and the key format
+can be specified using <code>--remote-key-format</code>.</p>
+
+<p>You can prevent terrarium from either uploading or downloading archives
+using the <code>--no-upload</code> and <code>--no-download</code> options.</p>
+
+<h2>Using S3 storage backend</h2>
+
+<p>terrarium supports storing and retrieving archives on Amazon S3. These
+options will only be available if <code>boto</code> is installed.</p>
+
+<pre><code>--s3-bucket
+--s3-access-key
+--s3-secret-key
+--s3-max-retries
+</code></pre>
+
+<p>Each of these options can be specified using environment variables, e.g.
+<code>S3_BUCKET</code> instead of being passed in as a parameter.</p>
+
+<h2>Python/Platform Support</h2>
+
+<p>Currently, python 2.5, 2.6 and 2.7 on Linux are supported and tested.
+Python 3 support is 
+<a href="https://github.com/PolicyStat/terrarium/issues/8">planned</a> and
+Windows support is an option if folks require it (pull requests and
+bug reports welcome).</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/PolicyStat">PolicyStat</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
