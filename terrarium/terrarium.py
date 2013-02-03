@@ -99,8 +99,8 @@ class Terrarium(object):
         for arg in self.args.reqs:
             if os.path.exists(arg):
                 reqs = parse_requirements(arg, options=options)
-                requirements_set.update([str(r.req) for r in reqs])
-        self._requirements = sorted(list(requirements_set))
+                requirements_set.update([r.url or r.req for r in reqs])
+        self._requirements = sorted([str(r) for r in requirements_set])
         return self._requirements
 
     def install(self):
