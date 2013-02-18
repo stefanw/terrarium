@@ -26,6 +26,9 @@ from virtualenv import (  # noqa
     create_bootstrap_script,
 )
 
+from pip.commands.install import InstallCommand
+from pip.req import parse_requirements
+
 logger = getLogger(__name__)
 
 # http://www.astro.keele.ac.uk/oldusers/rno/Computing/File_magic.html
@@ -87,15 +90,17 @@ class Terrarium(object):
     def requirements(self):
         if self._requirements is not None:
             return self._requirements
-        lines = []
+        requirements_set = set()
+
+        # need options object for parse_requirements
+        command = InstallCommand()
+        options, _ = command.parser.parse_args([])
+
         for arg in self.args.reqs:
             if os.path.exists(arg):
-                with open(arg, 'r') as f:
-                    for line in f.readlines():
-                        line = line.strip()
-                        if line and not line.startswith('#'):
-                            lines.append(line)
-        self._requirements = sorted(lines)
+                reqs = parse_requirements(arg, options=options)
+                requirements_set.update([r.url or r.req for r in reqs])
+        self._requirements = sorted([str(r) for r in requirements_set])
         return self._requirements
 
     def install(self):
