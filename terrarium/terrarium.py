@@ -29,6 +29,10 @@ from virtualenv import (  # noqa
 from pip.commands.install import InstallCommand
 from pip.req import parse_requirements
 
+import pip
+if hasattr(pip, 'version_control'):
+    pip.version_control()
+
 logger = getLogger(__name__)
 
 # http://www.astro.keele.ac.uk/oldusers/rno/Computing/File_magic.html
